@@ -113,7 +113,6 @@ interactive terminal.
 
 | Tool | Use for |
 | --- | --- |
-| `rg` | content search when the Grep tool lacks a flag |
 | `fd` | finding files beyond name match — type/mtime filters, `-x` per result |
 | `eza` | enhanced `ls` (git status, `eza --tree`) |
 | `dua` | fast disk usage, non-interactive (`dua /path`) |
