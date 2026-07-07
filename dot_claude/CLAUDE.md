@@ -16,23 +16,6 @@ or about to say "I believe"/"IIRC".
   Overflow, releases). Prefer over WebSearch; fall back to WebSearch only if Exa
   doesn't have it.
 
-## Getting My Attention
-
-When you finish a working turn and are genuinely handing control back to me, call
-the `PushNotification` tool with a short, specific message saying what's done or
-what you need (I'm often looking elsewhere). A `PreToolUse` hook turns that into a
-local sound + desktop banner. You are the only one who knows whether the work is
-truly done — so you make the call; a `Stop` hook only nudges you once if you end a
-working turn without pinging.
-
-- **Do** ping when: a task is complete, you need my input or a decision, or you
-  hit something that blocks further progress.
-- **Do NOT** ping when other `run_in_background` tasks are still running (you'll
-  be auto-resumed — wait and ping once everything is actually done), or when I'm
-  clearly still here watching a quick exchange.
-- Permission prompts and phone push are handled natively/by hooks, so don't
-  notify for those.
-
 ## Planning and Brainstorming
 
 In plan mode or when planning/brainstorming, work interview-style: ask questions

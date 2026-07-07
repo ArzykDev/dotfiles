@@ -54,15 +54,6 @@
         ]
       },
       {
-        "matcher": "PushNotification",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/notify.sh attention"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -100,17 +91,34 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/notify.sh permission"
+            "command": "~/.claude/notify.sh permission_prompt"
           }
         ]
-      }
-    ],
-    "Stop": [
+      },
       {
+        "matcher": "idle_prompt",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/stop-attention.sh"
+            "command": "~/.claude/notify.sh idle_prompt"
+          }
+        ]
+      },
+      {
+        "matcher": "agent_completed",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/notify.sh agent_completed"
+          }
+        ]
+      },
+      {
+        "matcher": "agent_needs_input",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/notify.sh agent_needs_input"
           }
         ]
       }
@@ -144,7 +152,7 @@
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
-  "preferredNotifChannel": "notifications_disabled",
+  "preferredNotifChannel": "auto",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,

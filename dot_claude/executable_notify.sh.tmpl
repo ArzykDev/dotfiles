@@ -1,52 +1,31 @@
 #!/usr/bin/env bash
-# Claude Code attention notifier: a sound plus a silent desktop banner.
-# Hook-driven — reads the firing hook's JSON on stdin and lifts the message from
-# the field that hook uses; falls back to "$2", then a per-mode default.
-#   permission - Notification hook (permission_prompt): Claude is blocked on me.
-#                message <- .message
-#   attention  - PreToolUse hook on the PushNotification tool: Claude is handing
-#                control back. message <- .tool_input.message (same text that
-#                goes to my phone). Exits 0 and prints nothing, so the push still
-#                proceeds untouched.
-# Banners are silent on purpose; the sound comes from afplay/paplay so we never
-# double up with Claude Code's own notification. The Stop hook never sounds
-# directly — it can't tell a real handoff from a background-resume — it only
-# nudges the model to call PushNotification, which lands back here.
+# Claude Code sound cue: plays a distinct sound per Notification event so each
+# one is recognizable by ear. The desktop banner itself comes from Claude Code's
+# native notifications (preferredNotifChannel=auto); this script only adds audio.
+# Ghostty's own notification sound is muted in macOS System Settings so the
+# native banner stays silent and we never double up. Wire one Notification-hook
+# matcher per event to `notify.sh <matcher>`.
 set -eu
 
 event="${1:-}"
-msg="${2:-}"
-
-if [ -z "$msg" ] && ! [ -t 0 ] && command -v jq >/dev/null 2>&1; then
-  payload="$(cat)"
-  case "$event" in
-    permission) msg="$(jq -r '.message // empty'            <<<"$payload" 2>/dev/null || true)" ;;
-    attention)  msg="$(jq -r '.tool_input.message // empty' <<<"$payload" 2>/dev/null || true)" ;;
-  esac
-fi
-
-case "$event" in
-  permission) title="Claude needs permission"; [ -n "$msg" ] || msg="Waiting for your approval" ;;
-  attention)  title="Claude Code";             [ -n "$msg" ] || msg="Ready for you" ;;
-  *) exit 0 ;;
-esac
 
 {{ if eq .chezmoi.os "darwin" -}}
-# Banner first (instant), then sound in the foreground so the script outlives it.
-# argv form avoids all the AppleScript string-escaping traps.
-osascript - "$title" "$msg" <<'OSA'
-on run argv
-  display notification (item 2 of argv) with title (item 1 of argv)
-end run
-OSA
 case "$event" in
-  permission) afplay /System/Library/Sounds/Tink.aiff ;;
-  attention)  afplay /System/Library/Sounds/Glass.aiff ;;
+  permission_prompt) sound=/System/Library/Sounds/Tink.aiff ;;
+  idle_prompt)       sound=/System/Library/Sounds/Glass.aiff ;;
+  agent_completed)   sound=/System/Library/Sounds/Hero.aiff ;;
+  agent_needs_input) sound=/System/Library/Sounds/Morse.aiff ;;
+  *) exit 0 ;;
 esac
+afplay "$sound"
 {{ else -}}
-command -v notify-send >/dev/null 2>&1 && notify-send "$title" "$msg"
+base=/usr/share/sounds/ocean/stereo
 case "$event" in
-  permission) paplay /usr/share/sounds/ocean/stereo/message-new-instant.oga ;;
-  attention)  paplay /usr/share/sounds/ocean/stereo/completion-success.oga ;;
+  permission_prompt) sound="$base/message-new-instant.oga" ;;
+  idle_prompt)       sound="$base/completion-success.oga" ;;
+  agent_completed)   sound="$base/dialog-information.oga" ;;
+  agent_needs_input) sound="$base/window-attention.oga" ;;
+  *) exit 0 ;;
 esac
+command -v paplay >/dev/null 2>&1 && [ -f "$sound" ] && paplay "$sound"
 {{ end -}}
