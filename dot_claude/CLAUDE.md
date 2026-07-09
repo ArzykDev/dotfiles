@@ -36,6 +36,11 @@ where you can; match the file's existing comment style and density.
 50/72 conventional commits: title ≤50 chars, body lines ≤72. Plain text only — no
 markdown, no bullet points.
 
+Don't mention my local helper scripts in commit messages or PR descriptions —
+ad-hoc scripts on my PATH (e.g. in `~/bin` or `~/.local/bin`) that aren't part of
+the repo or installed system-wide. They're personal to my machine and mean
+nothing to anyone else reading the history.
+
 ## Pull Requests — Issue-Closing Keywords
 
 GitHub auto-closes a linked issue on merge if the PR body OR any commit contains a
