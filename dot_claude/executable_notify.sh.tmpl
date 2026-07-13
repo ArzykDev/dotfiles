@@ -24,7 +24,7 @@ case "$event" in
   permission_prompt) sound="$base/message-new-instant.oga" ;;
   idle_prompt)       sound="$base/completion-success.oga" ;;
   agent_completed)   sound="$base/dialog-information.oga" ;;
-  agent_needs_input) sound="$base/window-attention.oga" ;;
+  agent_needs_input) sound="$base/message-attention.oga" ;;
   *) exit 0 ;;
 esac
 command -v paplay >/dev/null 2>&1 && [ -f "$sound" ] && paplay "$sound"
