@@ -63,6 +63,17 @@ closing keyword (`close`/`closes`/`closed`, `fix`/`fixes`/`fixed`,
 - Use the project's own package manager, scripts, formatter, and test commands
   before falling back to the global preferences below.
 
+## Subagent Model Selection
+
+When spawning subagents, pick the model by the task, not the session's model.
+Sonnet is the default and handles the vast majority of delegated work — search,
+file edits, focused refactors, routine analysis. Reserve Opus for genuinely
+complex subtasks: intricate multi-file reasoning, subtle debugging, or
+architecture-level design where the extra capability earns its cost. This matters
+most when I'm driving the session with Fable: never run subagents as Fable —
+that's wastefully expensive for delegated work — drop to Sonnet (or Opus only if
+the subtask truly warrants it).
+
 ## Project Instructions — Prefer AGENTS.md
 
 `AGENTS.md` is the cross-tool standard (Claude Code, Codex, Cursor, Copilot,
