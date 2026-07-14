@@ -114,9 +114,15 @@ interactive terminal.
 **mise** (polyglot version manager in use; manages Node, Go, npm, pnpm, yarn —
 *not* rust/python/bun, which stay on rustup/uv/bun). Reads `mise.toml` and
 idiomatic files (`.node-version`/`.nvmrc`/`.tool-versions`); global versions
-live in `~/.config/mise/config.toml`. `mise activate`'s directory hook only
-fires in an *interactive* shell, so a non-interactive `cd dir && …` keeps the
-global tool version — often a newer major than the project pins, causing odd
-test/build failures (e.g. `localStorage.getItem is not a function`). Guard
-project commands with `mise exec --` (alias `mise x --`), e.g. `cd path/to/pkg
-&& mise exec -- npm run test`.
+live in `~/.config/mise/config.toml`. My `settings.json` has `SessionStart` and
+`CwdChanged` hooks that write `mise env` to `$CLAUDE_ENV_FILE`, so the tool
+versions pinned at your working directory are injected into PATH for every Bash
+call automatically — no need to prefix project commands with `mise exec --`;
+just run `npm run test` and you'll get the pinned version. A `cd` into a subdir
+of the working-directory tree persists across calls and re-fires the hook, so
+`mise env` re-resolves for that subdir too — a monorepo package gets its own
+pinned versions once you're in it. One gotcha: within a *single* compound call,
+`cd subdir && npm run test` runs with the env from *before* the `cd` (the hook
+only re-fires after the call returns). If that subdir pins a different version,
+either cd in its own call first, or re-resolve inline with `mise x --`, e.g.
+`cd subdir && mise x -- npm run test`.
