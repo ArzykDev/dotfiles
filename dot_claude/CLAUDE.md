@@ -74,6 +74,11 @@ most when I'm driving the session with Fable: never run subagents as Fable —
 that's wastefully expensive for delegated work — drop to Sonnet (or Opus only if
 the subtask truly warrants it).
 
+This applies to workflows too, since they fan out across subagents — pick each
+stage's model by its task, never Fable. The code-review workflow especially:
+never run it with Fable, use Opus at most (Sonnet for the lighter stages where it
+suffices).
+
 ## Project Instructions — Prefer AGENTS.md
 
 `AGENTS.md` is the cross-tool standard (Claude Code, Codex, Cursor, Copilot,
