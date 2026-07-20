@@ -51,6 +51,16 @@
             "command": "mise env -s bash > \"$CLAUDE_ENV_FILE\""
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/herdr-agent-state.sh session",
+            "timeout": 10
+          }
+        ]
       }
     ],
     "CwdChanged": [

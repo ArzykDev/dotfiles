@@ -1,5 +1,6 @@
 [tools]
 go = "latest"
+herdr = "latest"
 node = "26"
 npm = "latest"
 pnpm = "latest"
