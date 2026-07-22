@@ -1,12 +1,12 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 90,
+  "env": {
+    "USE_BUILTIN_RIPGREP": "0"
+  },
   "attribution": {
     "commit": "",
     "pr": ""
-  },
-  "env": {
-    "USE_BUILTIN_RIPGREP": "0"
   },
   "permissions": {
     "allow": [
@@ -162,9 +162,17 @@
   "enabledPlugins": {
     "claude-code-wakatime@wakatime": false,
     "frontend-design@claude-plugins-official": true,
-    "skill-creator@claude-plugins-official": true
+    "skill-creator@claude-plugins-official": true,
+    "ponytail@ponytail": true
   },
-  "extraKnownMarketplaces": {},
+  "extraKnownMarketplaces": {
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
   "sandbox": {
     "filesystem": {
       "allowWrite": [
@@ -179,6 +187,7 @@
     }
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "autoDreamEnabled": true,
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
@@ -187,6 +196,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "effortLevel": "high"
+  "voiceEnabled": true
 }
