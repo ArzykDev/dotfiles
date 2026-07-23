@@ -16,6 +16,20 @@ or about to say "I believe"/"IIRC".
   Overflow, releases). Prefer over WebSearch; fall back to WebSearch only if Exa
   doesn't have it.
 
+## Working with External APIs
+
+Before writing integration code against a third-party API (Simkl, TVDB, Sonarr,
+Rebble, etc.), fetch and cite the official API/format docs first. Never guess at
+file/JSON import formats — if two attempts fail, switch to the documented REST
+API instead of iterating on guesses.
+
+## Debugging
+
+Don't declare a root cause from absence of evidence (no coredump, README-only
+inspection, log level defaults). State the hypothesis, name the falsifying test,
+run it, then conclude. If I contradict a premise, drop the prior chain entirely
+and re-derive rather than patching the old conclusion.
+
 ## Planning and Brainstorming
 
 In plan mode or when planning/brainstorming, work interview-style: ask questions
@@ -31,7 +45,7 @@ effect. Don't restate code, add section banners, narrate the diff ("renamed
 from…", "now also handles…"), or write redundant docstrings. Keep it to a line
 where you can; match the file's existing comment style and density.
 
-## Git Commits
+## Git Commits and SSH
 
 50/72 conventional commits: title ≤50 chars, body lines ≤72. Plain text only — no
 markdown, no bullet points.
@@ -40,6 +54,27 @@ Don't mention my local helper scripts in commit messages or PR descriptions —
 ad-hoc scripts on my PATH (e.g. in `~/bin` or `~/.local/bin`) that aren't part of
 the repo or installed system-wide. They're personal to my machine and mean
 nothing to anyone else reading the history.
+
+Commits and SSH auth are signed via the 1Password agent, which may need me
+present to approve. Don't probe it with `ssh-add -l` — it reports "no
+identities" even when signing works fine. Just run the command; if signing
+fails and I'm clearly away, don't block: commit with `--no-gpg-sign` and note
+that it needs signing later (`git commit --amend -S`, or
+`git rebase --exec 'git commit --amend --no-edit -S' <base>` for several).
+
+For SSH to a host I'll hit more than once, always multiplex — one approval,
+then every later connection rides the same socket:
+
+    ssh -o ControlMaster=auto -o ControlPath=~/.ssh/cm-%r@%h:%p \
+        -o ControlPersist=10m host
+
+Commit only the files touched by the current task; never `git add -A`.
+
+## Safety — Destructive Operations
+
+Never run `git stash pop`, `--force` applies, file deletions, or
+default-sink/system-config changes without first showing the plan and creating a
+backup patch. Ask before changing anything on a live session or device.
 
 ## Pull Requests — Issue-Closing Keywords
 
