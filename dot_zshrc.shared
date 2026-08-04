@@ -61,7 +61,7 @@ zinit ice wait"0c" lucid
 zinit light zsh-users/zsh-syntax-highlighting
 
 # Aliases
-alias ll="eza -la --icons"
+alias ll="eza -la --icons=auto"
 alias s="ssh"
 alias claude-yolo="claude --dangerously-skip-permissions"
 
