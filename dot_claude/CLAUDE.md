@@ -55,11 +55,15 @@ ad-hoc scripts on my PATH (e.g. in `~/bin` or `~/.local/bin`) that aren't part o
 the repo or installed system-wide. They're personal to my machine and mean
 nothing to anyone else reading the history.
 
-Commits and SSH auth are signed via the 1Password agent, which may need me
-present to approve. Don't probe it with `ssh-add -l` — it reports "no
-identities" even when signing works fine. Just run the command; if signing
-fails and I'm clearly away, don't block: commit with `--no-gpg-sign` and note
-that it needs signing later (`git commit --amend -S`, or
+Signing is per-repo: `git config --get commit.gpgsign` decides. Plenty of my
+repos don't sign — if it's not `true` there, just commit normally and don't add
+`-S` or mention signing at all.
+
+Where it is `true`, commits and SSH auth are signed via the 1Password agent,
+which may need me present to approve. Don't probe it with `ssh-add -l` — it
+reports "no identities" even when signing works fine. Just run the command; if
+signing fails and I'm clearly away, don't block: commit with `--no-gpg-sign`
+and note that it needs signing later (`git commit --amend -S`, or
 `git rebase --exec 'git commit --amend --no-edit -S' <base>` for several).
 
 For SSH to a host I'll hit more than once, always multiplex — one approval,
