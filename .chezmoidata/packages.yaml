@@ -16,7 +16,6 @@ packages:
         "ripgrep",
         "tealdeer",
         "tokei",
-        "topgrade",
         "yq",
         "zoxide",
       ]
@@ -37,7 +36,25 @@ packages:
         "ripgrep",
         "tealdeer",
         "tokei",
-        "topgrade",
+        "yq",
+        "zoxide",
+      ]
+    apt:
+      [
+        "bat",
+        "fastfetch",
+        "fd-find",
+        "fzf",
+        "gh",
+        "git-credential-oauth",
+        "git-delta",
+        "hyperfine",
+        "jq",
+        "lazygit",
+        "neovim",
+        "ripgrep",
+        "tealdeer",
+        "tokei",
         "yq",
         "zoxide",
       ]
