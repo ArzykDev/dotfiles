@@ -59,4 +59,4 @@ packages:
         "zoxide",
       ]
   shared:
-    cargo: ["eza", "cargo-binstall", "cargo-update", "starship", "xh"]
+    cargo: ["eza", "cargo-update", "starship", "xh"]
