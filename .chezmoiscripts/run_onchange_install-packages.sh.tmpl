@@ -1,4 +1,7 @@
 #!/bin/bash
+# Without set -e a failed install still exits 0, so chezmoi records the script
+# as applied and never retries it until packages.yaml changes again.
+set -eu
 {{ if eq .chezmoi.os "darwin" -}}
 brew bundle --file=/dev/stdin <<EOF
 {{ range .packages.darwin.brews -}}
@@ -7,11 +10,13 @@ brew {{ . | quote }}
 EOF
 {{ else if eq .chezmoi.os "linux" -}}
 if command -v dnf >/dev/null; then
+  echo "==> installing dnf packages (needs sudo)"
   sudo dnf install -y {{ range .packages.linux.dnf }}{{ . | quote }} {{ end }}
 elif command -v apt-get >/dev/null; then
+  echo "==> installing apt packages (needs sudo)"
   sudo apt-get update
   sudo apt-get install -y {{ range .packages.linux.apt }}{{ . | quote }} {{ end }}
 fi
 {{ end -}}
 command -v cargo-binstall >/dev/null || cargo install --locked cargo-binstall
-cargo binstall -y --locked {{ range .packages.shared.cargo }}{{ . | quote }} {{ end }}
+cargo binstall -y --locked --continue-on-failure {{ range .packages.shared.cargo }}{{ . | quote }} {{ end }}
