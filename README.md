@@ -16,6 +16,16 @@ chezmoi's source-state naming format, then applied into `$HOME`.
 - `.chezmoi.toml.tmpl` - chezmoi data/config template
 - `.chezmoiignore.tmpl` - ignored paths for this source tree
 
+## Bootstrap a New Machine
+
+Encrypted files (`~/.ssh/config`) need the age key in place before the first
+apply, otherwise `chezmoi init --apply` leaves them undecrypted:
+
+```sh
+op document get "Chezmoi Age Key" --out-file ~/.config/chezmoi/key.txt
+chezmoi init --apply ArzykDev/dotfiles
+```
+
 ## Common Commands
 
 Preview changes before applying them:
