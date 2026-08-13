@@ -38,6 +38,14 @@ export FZF_DEFAULT_OPTS="
 zinit light zsh-users/zsh-completions
 autoload -Uz compinit; compinit
 
+# ssh/scp/rsync complete Host aliases from ~/.ssh/config instead of the default
+# known_hosts + /etc/hosts + local users soup. Patterns (Host *) dropped.
+[[ -r ~/.ssh/config ]] && zstyle ':completion:*:(ssh|scp|sftp|rsync|sshfs):*' hosts \
+    ${${(@)=${${(M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }}:#*[*?]*}
+# ...and only real accounts for the user@ half; UID <1000 is system, 65534 nobody
+zstyle ':completion:*:(ssh|scp|sftp|rsync|sshfs):*' users \
+    ${(f)"$(getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 { print $1 }')"}
+
 zinit ice lucid atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20"
 zinit light zsh-users/zsh-autosuggestions
 
