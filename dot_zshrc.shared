@@ -38,10 +38,34 @@ export FZF_DEFAULT_OPTS="
 zinit light zsh-users/zsh-completions
 autoload -Uz compinit; compinit
 
-# ssh/scp/rsync complete Host aliases from ~/.ssh/config instead of the default
-# known_hosts + /etc/hosts + local users soup. Patterns (Host *) dropped.
-[[ -r ~/.ssh/config ]] && zstyle ':completion:*:(ssh|scp|sftp|rsync|sshfs):*' hosts \
-    ${${(@)=${${(M)${(f)"$(<~/.ssh/config)"}:#Host *}#Host }}:#*[*?]*}
+# Host aliases from the ssh config, following Include (relative paths resolve
+# against ~/.ssh, globs allowed). Patterns and negations aren't connectable.
+# Re-run and re-set the style below after editing the config; this is startup-only.
+_ssh_config_hosts() {
+    setopt localoptions nullglob
+    # OpenSSH caps include depth too; without this a self-include spews
+    # "recursion limit exceeded" into every new shell. The @ is load-bearing.
+    (( ${#${(@M)funcstack:#_ssh_config_hosts}} > 16 )) && return
+    local f l p; local -a w
+    for f in $@; do
+        [[ -r $f && -f $f ]] || continue   # -f so a fifo can't hang startup
+        while IFS= read -r l || [[ -n $l ]]; do   # || catches a missing final newline
+            # (Z+C+) strips trailing #comments, (Q) unquotes "paths with spaces"
+            w=("${(@Q)${(Z+C+)${l%$'\r'}}}")
+            case ${(L)w[1]} in
+                host)    print -l -- ${w[2,-1]:#(\!*|*[*?]*)} ;;
+                include) for p in ${w[2,-1]}; do
+                             [[ $p == (\~|/)* ]] || p=~/.ssh/$p
+                             _ssh_config_hosts ${~p}
+                         done ;;
+            esac
+        done < $f
+    done
+}
+
+# ssh/scp/rsync complete those instead of the default known_hosts + /etc/hosts soup
+zstyle ':completion:*:(ssh|scp|sftp|rsync|sshfs):*' hosts \
+    ${(u)${(f)"$(_ssh_config_hosts ~/.ssh/config)"}}
 # ...and only real accounts for the user@ half; UID <1000 is system, 65534 nobody
 zstyle ':completion:*:(ssh|scp|sftp|rsync|sshfs):*' users \
     ${(f)"$(getent passwd | awk -F: '$3 >= 1000 && $3 < 65534 { print $1 }')"}
