@@ -1,4 +1,5 @@
 [tools]
+age = "latest"
 "aqua:ViRb3/wgcf" = "latest"
 "aqua:noborus/ov" = "latest"
 "aqua:topgrade-rs/topgrade" = "latest"
