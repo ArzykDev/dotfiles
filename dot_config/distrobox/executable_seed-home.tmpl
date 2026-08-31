@@ -1,0 +1,19 @@
+#!/bin/sh
+# Seed a distrobox's isolated home from ~/.config/distrobox/home — everything a
+# box gets is in that one directory.
+#
+# Invoked by container_init_hook (see distrobox.conf) as the container user at
+# every container start. The source is readable from inside the box because
+# distrobox mounts the host home there, so this needs no clone and no network.
+set -eu
+
+src="{{ .chezmoi.homeDir }}/.config/distrobox/home"
+
+[ -e /run/.containerenv ] || exit 0       # not in a container
+[ "$HOME" != "{{ .chezmoi.homeDir }}" ] || exit 0      # shared-home box: leave the host alone
+[ -d "$src" ] || exit 0
+
+# -L resolves the starship.toml symlink to a real file, so the box gets a copy and
+# can't write through to a host config. Overwrites every start — per-box tweaks
+# belong in ~/.zshrc.local, which nothing here manages.
+cp -aL "$src/." "$HOME/"

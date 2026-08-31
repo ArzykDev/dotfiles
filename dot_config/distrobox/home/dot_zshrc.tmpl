@@ -1,0 +1,32 @@
+# Deliberately minimal: starship and mise. The host's .zshrc.shared is not used —
+# zinit, atuin, fzf-tab and abbr all want state, keys or binaries a box either
+# shouldn't share with the host or doesn't have.
+#
+# The PATH loop is only a safety net for shells that don't inherit the host env
+# (su, cron); distrobox forwards the host's PATH anyway. Those binaries are
+# cargo-binstall'd with a low glibc baseline, so they run in older guests.
+# Appended, not prepended, so the box's own toolchain wins.
+for _d in bin .local/bin .cargo/bin; do
+    [[ -d {{ .chezmoi.homeDir }}/$_d ]] && PATH="$PATH:{{ .chezmoi.homeDir }}/$_d"
+done
+unset _d
+export PATH
+
+export XDG_CONFIG_HOME="$HOME/.config"
+for _e in hx nvim vim vi; do
+    (( $+commands[$_e] )) && { export EDITOR=$_e; break }
+done
+unset _e
+
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt hist_ignore_all_dups
+
+autoload -Uz compinit && compinit
+
+(( $+commands[starship] )) && eval "$(starship init zsh)"
+(( $+commands[mise] )) && eval "$(mise activate zsh)"
+
+# Escape hatch for per-box tweaks: unmanaged, so the hook never clobbers it.
+[[ -f $HOME/.zshrc.local ]] && source "$HOME/.zshrc.local"
