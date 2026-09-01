@@ -7,8 +7,13 @@
 // custom settings, run the `open default settings` command
 // from the command palette or from `Zed` application menu.
 {
+  "git": {
+    "diff_base": "default_branch"
+  },
+  "soft_wrap": "editor_width",
   "diff_view_style": "unified",
   "project_panel": {
+    "hide_hidden": false,
     "dock": "left",
   },
   "collaboration_panel": {
@@ -27,6 +32,7 @@
     "provider": "ollama",
   },
   "git_panel": {
+    "group_by": "status",
     "tree_view": true,
     "dock": "left",
     "sort_by_path": false,
@@ -86,4 +92,14 @@
   "inlay_hints": {
     "enabled": true,
   },
+  "file_scan_exclusions": [
+     "**/.svn",
+     "**/.hg",
+     "**/.jj",
+     "**/CVS",
+     "**/.DS_Store",
+     "**/Thumbs.db",
+     "**/.classpath",
+     "**/.settings"
+   ],
 }
