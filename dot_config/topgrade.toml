@@ -6,4 +6,4 @@
 only = ["atuin", "brew_cask", "brew_formula", "bun", "bun_packages", "cargo", "chezmoi", "claude_code", "custom_commands", "deno", "distrobox", "dotnet", "gearlever", "getnf", "github_cli_extensions", "go", "helix", "mise", "ollama", "protonplus", "rustup", "shell", "tldr", "uv", "vscode", "vscodium"]
 
 [commands]
-"skills" = "bunx skills update --global"
+"skills" = "pnpx skills update --global"
