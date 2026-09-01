@@ -9,10 +9,12 @@ chezmoi = "latest"
 go = "latest"
 "go:golang.org/x/tools/cmd/goimports" = "latest"
 "go:golang.org/x/tools/gopls" = "latest"
+gotestsum = "latest"
 herdr = "latest"
 node = "26"
 npm = "latest"
 "npm:bash-language-server" = "latest"
+"npm:nx" = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:yaml-language-server" = "latest"
 pnpm = "latest"
@@ -24,4 +26,3 @@ yarn = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node", "npm", "pnpm", "yarn"]
-npm.package_manager = "bun"
