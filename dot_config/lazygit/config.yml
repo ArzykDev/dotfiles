@@ -54,16 +54,13 @@ customCommands:
         echo "✗ Commit cancelled"
       fi
     output: terminal
-
 os:
   editPreset: nvim
   editInTerminal: true
 promptToReturnFromSubprocess: false
-
 git:
-  pagers:
-    - pager: delta --dark --paging=never
+  diffRenderers:
+    - command: delta --dark --paging=never
   autoForwardBranches: allBranches
-
 gui:
   nerdFontsVersion: "3"
