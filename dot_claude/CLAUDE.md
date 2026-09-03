@@ -5,16 +5,21 @@ tooling always win over what's here.
 
 ## Research First — Look Things Up
 
-Model knowledge goes stale. Look up current docs before writing code or advising
-on any library, framework, API, service, or CLI — even familiar ones — and
-especially when integrating an external API, debugging version-specific behavior,
-or about to say "I believe"/"IIRC".
+Model knowledge goes stale; answering from memory about a library, framework,
+API, service, or CLI is a bug, not a shortcut. Before writing code against one
+or advising on it — even a familiar one — fetch current docs first. Mandatory
+when integrating an external API, debugging version-specific behavior, or when
+you're about to write "I believe"/"IIRC"/"as far as I know".
 
-- **context7** — library/framework docs, API syntax, config, version migration,
-  CLI usage. Prefer over web search when published docs exist.
-- **Exa** — broader web research (blogs, changelogs, GitHub issues, Stack
-  Overflow, releases). Prefer over WebSearch; fall back to WebSearch only if Exa
-  doesn't have it.
+- **context7** (`resolve-library-id` → `query-docs`) — library/framework docs,
+  API syntax, config, version migration, CLI usage. First stop whenever
+  published docs exist.
+- **Exa** — everything else on the web: blogs, changelogs, GitHub issues, Stack
+  Overflow, releases. WebSearch is disabled in my settings, so Exa is the web;
+  `crawling_exa` fetches a specific URL.
+
+Don't ask permission to look things up; it's expected. Cite what you found
+(library + version) when it shaped the code.
 
 ## Working with External APIs
 
@@ -149,10 +154,10 @@ never `AGENTS.md`.
 
 ## Preferred CLI Tools
 
-Builtin `Grep`/`Glob`/`Read` beat shelling out for search/find/read — structured
-results, no shell-quoting traps, no ANSI cost. Reach for a CLI tool when a builtin
-doesn't fit (shell pipelines, type/time filters, exec-per-result) or for my own
-interactive terminal.
+Use whichever of the builtin tools or shell the harness steers you to for
+reading, searching, and editing files; I don't mind `sed`/heredocs/inline
+python for edits. When you do shell out, prefer the tools below over their
+traditional counterparts, in both your commands and my interactive terminal.
 
 | Tool | Use for |
 | --- | --- |
