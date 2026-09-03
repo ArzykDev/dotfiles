@@ -117,38 +117,12 @@
     ],
     "Notification": [
       {
-        "matcher": "permission_prompt",
+        "matcher": "permission_prompt|idle_prompt|agent_completed|agent_needs_input",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/notify.sh permission_prompt"
-          }
-        ]
-      },
-      {
-        "matcher": "idle_prompt",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/notify.sh idle_prompt"
-          }
-        ]
-      },
-      {
-        "matcher": "agent_completed",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/notify.sh agent_completed"
-          }
-        ]
-      },
-      {
-        "matcher": "agent_needs_input",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/notify.sh agent_needs_input"
+            "command": "~/.claude/notify.sh",
+            "async": true
           }
         ]
       }
