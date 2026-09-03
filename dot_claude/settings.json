@@ -40,7 +40,10 @@
       "Bash(id:*)",
       "Bash(type:*)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "deny": [
+      "WebSearch"
+    ]
   },
   "hooks": {
     "SessionStart": [
