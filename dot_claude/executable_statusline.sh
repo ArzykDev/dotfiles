@@ -38,6 +38,24 @@ IFS=$'\t' read -r current_dir model_name cost lines_added lines_removed duration
     ] | @tsv'
 )
 
+# Cache rate limits per profile for hooks, which never get them on stdin (hooks/usage-guard.sh).
+# An idle session replays its last-seen numbers on every refresh, so within one
+# window only a higher percentage may overwrite; a later resets_at starts fresh.
+cache="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/rate_limits.json"
+new_limits=$(echo "$stdin_data" | jq -c '.rate_limits // empty' 2>/dev/null)
+if [ -n "$new_limits" ]; then
+  mkdir -p "${cache%/*}"
+  jq -e --argjson n "$new_limits" '
+    ($n.five_hour.resets_at // 0) > (.five_hour.resets_at // 0)
+    or (($n.five_hour.resets_at // 0) == (.five_hour.resets_at // 0)
+        and ($n.five_hour.used_percentage // 0) >= (.five_hour.used_percentage // 0))
+  ' "$cache" >/dev/null 2>&1
+  # exit 1 = comparison false; anything else (missing or corrupt cache) also writes
+  if [ $? -ne 1 ]; then
+    echo "$new_limits" > "$cache.$$" && mv "$cache.$$" "$cache"
+  fi
+fi
+
 # Bash-level fallback: if jq crashed entirely, extract fields individually
 if [ -z "$current_dir" ] && [ -z "$model_name" ]; then
   current_dir=$(echo "$stdin_data" | jq -r '.workspace.current_dir // .cwd // "unknown"' 2>/dev/null)
