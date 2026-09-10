@@ -85,6 +85,26 @@ Never run `git stash pop`, `--force` applies, file deletions, or
 default-sink/system-config changes without first showing the plan and creating a
 backup patch. Ask before changing anything on a live session or device.
 
+## Secrets in Commands
+
+Hand secrets to commands with `op run -- cmd` (or `op run --env-file=.env --
+cmd`), not `op read`. `op run` masks secrets on stdout/stderr by default, so a
+mis-wired pipeline fails concealed; `op read` prints in cleartext and a wrong
+pipe leaks it.
+
+Never pipe a secret into a program that doesn't document a stdin password mode
+— it becomes input data and gets echoed back verbatim in the error (`psql`
+parses it as SQL, `ssh host` runs it as a remote command). Known-good stdin
+modes: `sudo -S`, `docker login --password-stdin`, `gpg --passphrase-fd 0`.
+Otherwise use the env var (`PGPASSWORD`), a config file (`~/.pgpass`,
+`mysql --defaults-extra-file`), or `op read -o` to a 0600 file.
+
+Never put a secret in argv or a connection URL (`postgres://u:p@host`) — argv
+shows up in `ps`, in error text, and in the transcript.
+
+Test the plumbing with a placeholder first, then swap in the real secret. If one
+leaks anyway, say so immediately and treat it as needing rotation.
+
 ## Pull Requests — Issue-Closing Keywords
 
 GitHub auto-closes a linked issue on merge if the PR body OR any commit contains a
@@ -151,6 +171,14 @@ log`/`.gitignore`/`.git/info/exclude` when unsure; ask if still ambiguous.
 
 Claude-only bits (skills, hooks, settings) go in `.claude/` or `CLAUDE.local.md`,
 never `AGENTS.md`.
+
+## Shell — zsh, not bash
+
+Bash-tool commands run in zsh with `nomatch` on: an unmatched glob or an
+unquoted `[...]` aborts the whole command before it runs. Quote any pattern the
+*called program* expands: `fd -e py`, `rg 'foo.*'`, `git log --grep='[A-Z]'`,
+`uv pip install 'pkg[extra]'`. Unquoted `$var` does not word-split — use arrays
+or quote. When a construct is bash-only, run `bash -c '…'` rather than guessing.
 
 ## Preferred CLI Tools
 
