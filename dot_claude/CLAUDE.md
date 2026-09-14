@@ -87,17 +87,24 @@ backup patch. Ask before changing anything on a live session or device.
 
 ## Secrets in Commands
 
-Hand secrets to commands with `op run -- cmd` (or `op run --env-file=.env --
-cmd`), not `op read`. `op run` masks secrets on stdout/stderr by default, so a
-mis-wired pipeline fails concealed; `op read` prints in cleartext and a wrong
-pipe leaks it.
+Hand 1Password secrets to commands only with `op run -- cmd` (`op run
+--env-file=.env -- cmd`, or `VAR=op://vault/item/field op run -- cmd`). Never
+`op read`, `--no-masking`, or any other path that puts a secret on stdout: `op
+run` masks secrets on stdout/stderr, so a mis-wired pipeline fails concealed.
+
+`op inject` is the one fallback, only when a tool truly needs a config file on
+disk and can't read an env var: `op inject -i tpl -o file` (writes 0600), never
+to stdout. Delete the file when done, keep it out of git.
+
+`op item get` is for metadata only (title, vault, field labels, `op://` refs).
+Never pass `--reveal` or `--otp`; concealed fields must stay concealed.
 
 Never pipe a secret into a program that doesn't document a stdin password mode
 — it becomes input data and gets echoed back verbatim in the error (`psql`
 parses it as SQL, `ssh host` runs it as a remote command). Known-good stdin
 modes: `sudo -S`, `docker login --password-stdin`, `gpg --passphrase-fd 0`.
-Otherwise use the env var (`PGPASSWORD`), a config file (`~/.pgpass`,
-`mysql --defaults-extra-file`), or `op read -o` to a 0600 file.
+Otherwise use the env var via `op run` (`PGPASSWORD`), or a config file via `op
+inject` (`~/.pgpass`, `mysql --defaults-extra-file`).
 
 Never put a secret in argv or a connection URL (`postgres://u:p@host`) — argv
 shows up in `ps`, in error text, and in the transcript.
