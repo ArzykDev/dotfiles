@@ -3,7 +3,7 @@
 
 [misc]
 
-only = ["atuin", "brew_cask", "brew_formula", "bun", "bun_packages", "cargo", "chezmoi", "claude_code", "custom_commands", "deno", "distrobox", "dotnet", "gearlever", "getnf", "github_cli_extensions", "go", "helix", "mise", "ollama", "protonplus", "rustup", "shell", "tldr", "uv", "vscode", "vscodium"]
+disable = ["config_update", "containers", "firmware", "flatpak", "node", "pip3", "pnpm", "self_update", "shell", "system", "typst", "vim", "waydroid", "yarn"]
 
-[commands]
-"skills" = "pnpx skills update --global"
+[skills]
+package_manager = "pnpm"
