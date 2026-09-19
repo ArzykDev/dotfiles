@@ -22,7 +22,6 @@
   "session": {
     "restore_unsaved_buffers": false,
   },
-  "window_decorations": "server",
   "restore_on_startup": "launchpad",
   "edit_predictions": {
     "ollama": {
@@ -102,4 +101,8 @@
      "**/.classpath",
      "**/.settings"
    ],
+  "linux": {
+    "use_podman": true,
+    "dev_container_use_buildkit": false,
+  },
 }
