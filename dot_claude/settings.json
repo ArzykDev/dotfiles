@@ -55,16 +55,6 @@
             "command": "mise env -s bash > \"$CLAUDE_ENV_FILE\""
           }
         ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/herdr-agent-state.sh session",
-            "timeout": 10
-          }
-        ]
       }
     ],
     "CwdChanged": [
@@ -93,37 +83,6 @@
           {
             "type": "command",
             "command": "~/.claude/hooks/worktree-guard.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "atuin hook claude-code"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "atuin hook claude-code"
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "atuin hook claude-code"
           }
         ]
       }
