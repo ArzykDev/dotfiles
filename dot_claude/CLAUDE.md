@@ -179,13 +179,13 @@ log`/`.gitignore`/`.git/info/exclude` when unsure; ask if still ambiguous.
 Claude-only bits (skills, hooks, settings) go in `.claude/` or `CLAUDE.local.md`,
 never `AGENTS.md`.
 
-## Shell — zsh, not bash
+## Shell — bash
 
-Bash-tool commands run in zsh with `nomatch` on: an unmatched glob or an
-unquoted `[...]` aborts the whole command before it runs. Quote any pattern the
-*called program* expands: `fd -e py`, `rg 'foo.*'`, `git log --grep='[A-Z]'`,
-`uv pip install 'pkg[extra]'`. Unquoted `$var` does not word-split — use arrays
-or quote. When a construct is bash-only, run `bash -c '…'` rather than guessing.
+Bash-tool commands run in bash. An unmatched glob is passed through as literal
+text instead of erroring, so a typo'd pattern silently becomes a wrong
+argument. Quote any pattern the *called program* expands: `fd -e py`,
+`rg 'foo.*'`, `git log --grep='[A-Z]'`, `uv pip install 'pkg[extra]'`.
+Unquoted `$var` word-splits and globs — quote it, or use arrays.
 
 ## Preferred CLI Tools
 

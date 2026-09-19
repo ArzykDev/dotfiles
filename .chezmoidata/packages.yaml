@@ -2,9 +2,12 @@ packages:
   darwin:
     brews:
       [
+        "bash",
+        "bash-completion@2",
         "bat",
         "fastfetch",
         "fd",
+        "flyline",
         "fzf",
         "gh",
         "git-credential-oauth",
