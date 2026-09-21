@@ -96,6 +96,11 @@ if enable flyline 2>/dev/null ||
         --command 'claude --effort low --print'
 
     flyline set-cursor --effect blink
+
+    # flyline renders PS1 itself and drops OSC escapes, so ghostty's PS1-embedded
+    # "title = cwd" reset never fires and the last command sticks in the titlebar.
+    __title_pwd() { printf '\e]2;%s\a' "${PWD/#$HOME/\~}"; }
+    PROMPT_COMMAND=("${PROMPT_COMMAND[@]}" __title_pwd)
 fi
 
 fastfetch
