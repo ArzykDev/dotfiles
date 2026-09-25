@@ -93,7 +93,7 @@ if enable flyline 2>/dev/null ||
     flyline set-agent-mode \
         --system-prompt "Be concise. Answer with a JSON array of at most 3 items with objects containing: command and description. Command will be a Bash command. " \
         --trigger-prefix ': ' \
-        --command 'claude --effort low --print'
+        --command 'claude --no-session-persistence --effort low --print'
 
     flyline set-cursor --effect blink
 
