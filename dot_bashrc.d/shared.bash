@@ -97,6 +97,8 @@ if enable flyline 2>/dev/null ||
 
     flyline set-cursor --effect blink
 
+    flyline mouse --mode disabled
+
     # flyline renders PS1 itself and drops OSC escapes, so ghostty's PS1-embedded
     # "title = cwd" reset never fires and the last command sticks in the titlebar.
     __title_pwd() { printf '\e]2;%s\a' "${PWD/#$HOME/\~}"; }
