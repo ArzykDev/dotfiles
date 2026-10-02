@@ -41,10 +41,10 @@
       "Bash(id:*)",
       "Bash(type:*)"
     ],
-    "defaultMode": "auto",
     "deny": [
       "WebSearch"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
     "SessionStart": [
@@ -149,6 +149,7 @@
   "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "preferredNotifChannel": "auto",
+  "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
