@@ -1,0 +1,44 @@
+# Deliberately minimal: starship, mise and flyline. The host's shared.bash is not
+# sourced — it points EDITOR/PAGER/MANPAGER at tools (hx, ov, bat) and runs
+# zoxide/fastfetch, none of which a fresh box has. Replaces the distro's skel
+# .bashrc; its skel .profile sources this for the login shell distrobox starts.
+
+# Fedora-family bash doesn't read /etc/bashrc on its own; Debian's reads
+# /etc/bash.bashrc itself.
+[[ -f /etc/bashrc ]] && . /etc/bashrc
+
+# The PATH loop is only a safety net for shells that don't inherit the host env
+# (su, cron); distrobox forwards the host's PATH anyway. Those binaries are
+# cargo-binstall'd with a low glibc baseline, so they run in older guests.
+# Appended, not prepended, so the box's own toolchain wins.
+for _d in bin .local/bin .cargo/bin; do
+    [[ -d {{ .chezmoi.homeDir }}/$_d && ":$PATH:" != *":{{ .chezmoi.homeDir }}/$_d:"* ]] &&
+        PATH="$PATH:{{ .chezmoi.homeDir }}/$_d"
+done
+unset _d
+export PATH
+
+export XDG_CONFIG_HOME="$HOME/.config"
+for _e in hx nvim vim vi; do
+    command -v $_e >/dev/null && { export EDITOR=$_e; break; }
+done
+unset _e
+
+[[ $- == *i* ]] || return
+
+command -v starship >/dev/null && eval "$(starship init bash)"
+command -v mise >/dev/null && eval "$(mise activate bash)"
+
+# $HOME is the box's own, so ~/.bash_history and flyline's JSONL store stay
+# per-box. The .so has a glibc 2.15 baseline, so it loads in any current guest.
+if enable -f {{ .chezmoi.homeDir }}/.local/lib/libflyline.so flyline 2>/dev/null; then
+    flyline history --backend flyline
+    flyline set-cursor --effect blink
+    flyline mouse --mode disabled
+    # See shared.bash: flyline drops the OSC title reset.
+    __title_pwd() { printf '\e]2;%s\a' "${PWD/#$HOME/\~}"; }
+    PROMPT_COMMAND=("${PROMPT_COMMAND[@]}" __title_pwd)
+fi
+
+# Escape hatch for per-box tweaks: unmanaged, so the hook never clobbers it.
+[[ -f $HOME/.bashrc.local ]] && . "$HOME/.bashrc.local"
