@@ -10,7 +10,8 @@ chezmoi's source-state naming format, then applied into `$HOME`.
 - `dot_config/` - application configuration under `~/.config`
 - `dot_codex/` - Codex configuration and agent instructions
 - `dot_claude/` - Claude configuration and helper scripts
-- `bin/` - executable scripts installed into `~/bin`
+- `dot_local/bin/` - executable scripts installed into `~/.local/bin`
+  (desktop-only ones are ignored elsewhere via `.chezmoiignore.tmpl`)
 - `dot_gitconfig.tmpl` - templated Git configuration
 - `dot_zshrc.shared` - shared Zsh configuration
 - `dot_bashrc.d/shared.bash` - shared Bash configuration (flyline, starship,

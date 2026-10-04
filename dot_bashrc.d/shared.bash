@@ -5,7 +5,7 @@
 [[ -x /opt/homebrew/bin/brew && ":$PATH:" != *":/opt/homebrew/bin:"* ]] &&
     eval "$(/opt/homebrew/bin/brew shellenv bash)"
 
-for _d in "$HOME/go/bin" "$HOME/.cargo/bin" "$HOME/.local/bin" "$HOME/bin"; do
+for _d in "$HOME/go/bin" "$HOME/.cargo/bin" "$HOME/.local/bin"; do
     [[ ":$PATH:" == *":$_d:"* ]] || PATH="$_d:$PATH"
 done
 unset _d
@@ -15,7 +15,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR=hx
 export PAGER=ov
 export MANPAGER="bat -plman"
-export EGET_BIN="$HOME/bin"
 export SYSTEMD_LESS='FRSMK'
 export SYSTEMD_COLORS=1
 export CLAUDE_CODE_NO_FLICKER=1
