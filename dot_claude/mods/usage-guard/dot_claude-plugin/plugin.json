@@ -1,0 +1,1 @@
+{ "name": "usage-guard", "version": "0.1.0", "description": "Wrap up and schedule a resume as the 5-hour usage window nears its limit" }

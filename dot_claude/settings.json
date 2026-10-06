@@ -3,7 +3,8 @@
   "cleanupPeriodDays": 90,
   "env": {
     "USE_BUILTIN_RIPGREP": "0",
-    "CLAUDE_CODE_PLUGIN_PREFER_HTTPS": "1"
+    "CLAUDE_CODE_PLUGIN_PREFER_HTTPS": "1",
+    "CLAUDE_CODE_PLUGIN_DIRS": "~/.claude/mods/usage-guard"
   },
   "attribution": {
     "commit": "",
@@ -69,15 +70,6 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/usage-guard.sh"
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -95,16 +87,6 @@
             "type": "command",
             "command": "~/.claude/notify.sh",
             "async": true
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/usage-guard.sh"
           }
         ]
       }
