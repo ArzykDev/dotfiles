@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Usage: prism-pack-check [target-mc]   (run inside a managed Prism instance dir)
+set -euo pipefail
+idx=mrpack/modrinth.index.json
+[[ -f $idx ]] || { echo "no $idx: not a managed Modrinth instance" >&2; exit 1; }
+for mods in .minecraft/mods minecraft/mods; do [[ -d $mods ]] && break; done
+loader=$(jq -r '.dependencies|keys[]|select(.!="minecraft")|sub("-loader$";"")' "$idx")
+pack=$(jq -r '.files[].path|select(startswith("mods/"))|ltrimstr("mods/")' "$idx" | sort)
+have=$(ls "$mods" | sed 's/\.disabled$//' | sort)
+added=$(comm -13 <(echo "$pack") <(echo "$have"))
+
+echo "== Pack mods you changed (pack's original file):"
+comm -23 <(echo "$pack") <(echo "$have")
+
+[[ -n ${1:-} ]] || exit 0
+echo "== Your mods without a $loader build for $1:"
+while read -r jar; do
+  t=$(grep -l -F "filename = '$jar'" "$mods"/.index/*.toml 2>/dev/null | head -1) \
+    || { echo "  ? $jar (no metadata, check by hand)"; continue; }
+  id=$(grep -oP "mod-id = '\K[^']+" "$t")
+  n=$(xh -b --ignore-stdin GET "https://api.modrinth.com/v2/project/$id/version" \
+        loaders=="[\"$loader\"]" game_versions=="[\"$1\"]" | jq length)
+  ((n > 0)) || echo "  MISSING $(basename "$t" .pw.toml)"
+done <<< "$added"
