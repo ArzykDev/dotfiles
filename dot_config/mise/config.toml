@@ -2,6 +2,7 @@
 age = "latest"
 "aqua:ViRb3/wgcf" = "latest"
 "aqua:noborus/ov" = "latest"
+"aqua:svenstaro/genact" = "latest"
 "aqua:topgrade-rs/topgrade" = "latest"
 "aqua:vercel-labs/agent-browser" = "latest"
 biome = "latest"
