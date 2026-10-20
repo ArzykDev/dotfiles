@@ -95,6 +95,7 @@ if enable flyline 2>/dev/null ||
         --command 'claude --no-session-persistence --effort low --print'
 
     flyline set-cursor --effect blink
+    flyline set-cursor --backend terminal
 
     flyline mouse --mode disabled
 
