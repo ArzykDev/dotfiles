@@ -34,7 +34,7 @@ vim.lsp.enable({
   'gopls',
   'rust_analyzer',
   'ts_ls', 'biome', 'eslint',
-  'pyright', 'ruff',
+  'basedpyright', 'ruff',
   'bashls',
   'lua_ls',
   'jsonls', 'yamlls', 'tombi',
