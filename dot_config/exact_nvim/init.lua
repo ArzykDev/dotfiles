@@ -4,6 +4,10 @@ vim.o.number = true
 vim.o.signcolumn = 'yes'
 vim.o.showmode = false -- the statusline shows the mode
 vim.o.laststatus = 3 -- one global statusline
+vim.o.undofile = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.scrolloff = 8
 
 vim.pack.add({
   { src = 'https://github.com/catppuccin/nvim', name = 'catppuccin' },
