@@ -2,12 +2,11 @@
 vim.g.mapleader = ' '
 vim.o.number = true
 vim.o.signcolumn = 'yes'
-vim.o.showmode = false -- lualine shows the mode
+vim.o.showmode = false -- the statusline shows the mode
+vim.o.laststatus = 3 -- one global statusline
 
 vim.pack.add({
   { src = 'https://github.com/catppuccin/nvim', name = 'catppuccin' },
-  'https://github.com/nvim-tree/nvim-web-devicons',
-  'https://github.com/nvim-lualine/lualine.nvim',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/ibhagwan/fzf-lua',
   'https://github.com/stevearc/conform.nvim',
@@ -21,22 +20,9 @@ require('catppuccin').setup({
 })
 vim.cmd.colorscheme('catppuccin')
 
--- statusline
-require('lualine').setup({
-  options = {
-    globalstatus = true,
-    section_separators = { left = '', right = '' },
-    component_separators = '',
-  },
-  sections = {
-    lualine_a = { 'mode' },
-    lualine_b = { 'branch', 'diff', 'diagnostics' },
-    lualine_c = { { 'filename', path = 1 } },
-    lualine_x = { 'lsp_status', 'filetype' },
-    lualine_y = { 'progress' },
-    lualine_z = { 'location' },
-  },
-})
+-- statusline: git and diff sections come from mini.git/mini.diff
+require('mini.icons').setup()
+require('mini.statusline').setup()
 
 -- LSP
 -- biome/eslint only attach when the project has their config, so both can stay enabled
