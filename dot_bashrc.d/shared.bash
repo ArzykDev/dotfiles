@@ -71,6 +71,9 @@ mkcd() {
 
 gi() { curl -sLw "\n" "https://www.toptal.com/developers/gitignore/api/$*"; }
 
+# chezmoi source dir looks like real configs to mise; the settings-file
+# equivalent is read too late to stop config discovery, so it must be env.
+export MISE_IGNORED_CONFIG_PATHS=~/.local/share/chezmoi
 eval "$(mise activate bash)"
 eval "$(starship init bash)"
 eval "$(zoxide init bash)"

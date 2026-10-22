@@ -115,6 +115,9 @@ _zsh_autosuggest_strategy_atuin() {
 }
 # mise: polyglot version manager (node/go/npm/pnpm/yarn). rust/python/bun stay
 # on rustup/uv/bun. Global versions live in ~/.config/mise/config.toml.
+# chezmoi source dir looks like real configs to mise; the settings-file
+# equivalent is read too late to stop config discovery, so it must be env.
+export MISE_IGNORED_CONFIG_PATHS=~/.local/share/chezmoi
 eval "$(mise activate zsh)"
 # zoxide's interactive fzf (zi). Self-contained: zoxide replaces FZF_DEFAULT_OPTS
 # rather than appending. No --exact = fuzzy. {2} is the path (score is field 1).

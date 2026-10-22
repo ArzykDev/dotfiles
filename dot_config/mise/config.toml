@@ -33,3 +33,6 @@ idiomatic_version_file_enable_tools = ["node", "npm", "pnpm", "yarn"]
 
 [settings.github]
 credential_command = "gh auth token"
+
+[settings.self_update]
+auto = true
