@@ -12,7 +12,7 @@ unset _d
 export PATH
 
 export XDG_CONFIG_HOME="$HOME/.config"
-export EDITOR=hx
+export EDITOR=nvim
 export PAGER=ov
 export MANPAGER="bat -plman"
 export SYSTEMD_LESS='FRSMK'
