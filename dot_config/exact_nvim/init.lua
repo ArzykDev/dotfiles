@@ -77,13 +77,52 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- git
 require('mini.diff').setup()
 require('mini.git').setup()
-vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end)
-vim.keymap.set({ 'n', 'x' }, '<leader>gb', function() MiniGit.show_at_cursor() end)
+vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end, { desc = 'Toggle diff overlay' })
+vim.keymap.set({ 'n', 'x' }, '<leader>gb', function() MiniGit.show_at_cursor() end, { desc = 'Git history at cursor' })
+
+-- files: also replaces netrw for `nvim dir` and `:e dir`
+require('mini.files').setup()
+vim.keymap.set('n', '<leader>e', function()
+  local path = vim.api.nvim_buf_get_name(0)
+  MiniFiles.open(path ~= '' and path or nil)
+end, { desc = 'File explorer' })
+
+-- editing: aN/iN keep the built-in v_an/v_in selection (LSP selectionRange) intact
+require('mini.ai').setup({ mappings = { around_next = 'aN', inside_next = 'iN' } })
+require('mini.surround').setup()
+
+-- key hints after a pause
+local miniclue = require('mini.clue')
+miniclue.setup({
+  triggers = {
+    { mode = { 'n', 'x' }, keys = '<Leader>' },
+    { mode = 'n', keys = '[' },
+    { mode = 'n', keys = ']' },
+    { mode = 'i', keys = '<C-x>' },
+    { mode = { 'n', 'x' }, keys = 'g' },
+    { mode = { 'n', 'x' }, keys = "'" },
+    { mode = { 'n', 'x' }, keys = '`' },
+    { mode = { 'n', 'x' }, keys = '"' },
+    { mode = { 'i', 'c' }, keys = '<C-r>' },
+    { mode = 'n', keys = '<C-w>' },
+    { mode = { 'n', 'x' }, keys = 'z' },
+  },
+  clues = {
+    { mode = { 'n', 'x' }, keys = '<Leader>g', desc = '+Git' },
+    miniclue.gen_clues.square_brackets(),
+    miniclue.gen_clues.builtin_completion(),
+    miniclue.gen_clues.g(),
+    miniclue.gen_clues.marks(),
+    miniclue.gen_clues.registers(),
+    miniclue.gen_clues.windows(),
+    miniclue.gen_clues.z(),
+  },
+})
 
 -- search
-vim.keymap.set('n', '<leader>f', '<cmd>FzfLua files<cr>')
-vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>')
-vim.keymap.set('n', '<leader>s', '<cmd>FzfLua lsp_document_symbols<cr>')
+vim.keymap.set('n', '<leader>f', '<cmd>FzfLua files<cr>', { desc = 'Find files' })
+vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Grep' })
+vim.keymap.set('n', '<leader>s', '<cmd>FzfLua lsp_document_symbols<cr>', { desc = 'Document symbols' })
 
 -- command-line autocompletion
 vim.o.wildmode = 'noselect:lastused,full'
